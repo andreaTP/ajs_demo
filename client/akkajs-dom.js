@@ -12,6 +12,11 @@ class DomActor extends akkajs.Actor {
     super()
     this.parentNode = parentNode
 
+    this.init = this.init.bind(this)
+
+    this.init()
+  }
+  init() {
     this.render = this.render.bind(this)
     this.update = this.update.bind(this)
 
@@ -48,7 +53,6 @@ class DomActor extends akkajs.Actor {
     }
   }
   postStop() {
-    console.log(`${this.self().path()} is going to stop`)
     try {
       this.parentNode.removeChild(this.node)
       this.node.remove()
@@ -58,27 +62,35 @@ class DomActor extends akkajs.Actor {
 
 class DomActorFromTemplate extends DomActor {
   constructor(template, parentNode) {
-    super()
+    super(parentNode)
     this.template = template
-    this.parentNode = parentNode
+    //this.parentNode = parentNode
 
-    this.render = this.render.bind(this)
-    this.update = this.update.bind(this)
-
-    this.receive = this.receive.bind(this)
-    this.preStart = this.preStart.bind(this)
-    this.postStop = this.postStop.bind(this)
-
-    this.tree = this.render()
-    this.node = createElement(this.tree)
+    this.init()
   }
   render(value) {
    return this.template
   }
 }
 
+class DomActorFromRender extends DomActor {
+  constructor(render, parentNode) {
+    super(parentNode)
+    this.parentNode = parentNode
+
+    this.dyn_render = render.bind(this)
+
+    this.init()
+  }
+  render(value) {
+    if (this.dyn_render !== undefined)
+      return this.dyn_render(value)
+  }
+}
+
 module.exports = {
   Update: Update,
   DomActor: DomActor,
-  DomActorFromTemplate: DomActorFromTemplate
+  DomActorFromTemplate: DomActorFromTemplate,
+  DomActorFromRender: DomActorFromRender
 }
