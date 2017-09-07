@@ -22,32 +22,54 @@ class DomActor extends akkajs.Actor {
 
     this.receive = this.receive.bind(this)
     this.preStart = this.preStart.bind(this)
+    this.preMount = this.preMount.bind(this)
+    this.afterMount = this.afterMount.bind(this)
     this.postStop = this.postStop.bind(this)
 
-    this.tree = this.render()
-    this.node = createElement(this.tree)
+    //this.tree = this.render()
+    //this.node = createElement(this.tree)
   }
   update(newValue) {
     let newTree = this.render(newValue)
-    let patches = diff(this.tree, newTree)
-    this.node = patch(this.node, patches)
-    this.tree = newTree
+
+    if (this.tree !== undefined) {
+      let patches = diff(this.tree, newTree)
+      this.node = patch(this.node, patches)
+      this.tree = newTree
+    } else {
+      this.node = createElement(newTree)
+      this.tree = newTree
+    }
   }
   preStart() {
     if (this.parentNode !== undefined) {
+      //Refactoring needed
+      this.preMount()
+      if (this.node === undefined) {
+        this.update()
+      }
       this.parentNode.appendChild(this.node)
+      this.afterMount()
     } else {
       this.parent().tell(new GetParentNode())
     }
   }
+  preMount() {}
+  afterMount() {}
   receive(msg) {
     if (msg instanceof Update) {
       this.update(msg.value)
     } else if (msg instanceof GetParentNode) {
       this.sender().tell(new ParentNode(this.node))
     } else if (msg instanceof ParentNode) {
+      //Refactoring needed
+      this.preMount()
+      if (this.node === undefined) {
+        this.update()
+      }
       this.parentNode = msg.node
       this.parentNode.appendChild(this.node)
+      this.afterMount()
     } else {
       this.operative(msg)
     }

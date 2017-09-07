@@ -54,3 +54,37 @@ let todoList2 =
     },
     document.body
   ))
+
+  class Validator extends akkajs_dom.DomActor {
+    constructor() {
+      super(document.body)
+    }
+    preMount() {
+      this.status = ""
+      this.update(this.status)
+    }
+    operative(msg) {
+      if (msg == "a") {
+        throw "Illegal key pressed"
+      } else {
+        this.status += msg
+        this.self().tell(new akkajs_dom.Update(this.status))
+      }
+    }
+    render(value) {
+      return <div>{[
+          <h4>Validator type everything but "a"</h4>,
+          <input onkeyup={ev => {this.self().tell(ev.key)}} value={value}></input>,
+          <p>{value}</p>
+      ]}</div>
+    }
+  }
+
+
+  class SupervisorExample extends akkajs.Actor {
+    preStart() {
+      this.spawn(new Validator())
+    }
+  }
+
+  let example = system.spawn(new SupervisorExample())
