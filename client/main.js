@@ -10,23 +10,22 @@ class ToDoList extends akkajs_dom.DomActor {
     super(document.body)
   }
   render(value) {
-    if (value !== undefined) {
-      let son = this.spawn(new akkajs_dom.DomActorFromTemplate(
-        <li>{[
-            value,
-            <button onclick={ev => { son.kill()} }>X</button>
-        ]}</li>,
-        document.getElementById("list")
-      ))
-    }
-
     return <div>{[
       <input id="elem"></input>,
-      <button onclick={ev => { this.self().tell(
-        new akkajs_dom.Update(document.getElementById("elem").value)
-      ) } }>Add</button>,
+      <button onclick=
+        {ev => { this.self().tell(document.getElementById("elem").value) }}
+      >Add</button>,
       <ul id="list"></ul>
     ]}</div>
+  }
+  operative(msg) {
+    let son = this.spawn(new akkajs_dom.DomActorFromTemplate(
+      <li>{[
+          msg,
+          <button onclick={ev => { son.kill()} }>X</button>
+      ]}</li>,
+      document.getElementById("list")
+    ))
   }
 }
 
