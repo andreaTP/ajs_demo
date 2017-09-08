@@ -3,7 +3,7 @@ const h = require('virtual-dom/h')
 const akkajs = require('akkajs')
 const akkajs_dom = require('./akkajs-dom.js')
 
-var system = akkajs.ActorSystem.create()
+const system = akkajs.ActorSystem.create()
 
 class ToDoList extends akkajs_dom.DomActor {
   constructor() {
@@ -36,7 +36,7 @@ class ListElement extends akkajs_dom.DomActor {
   }
 }
 
-let todoList = system.spawn(new ToDoList())
+const todoList = system.spawn(new ToDoList())
 
 class Validator extends akkajs_dom.DomActor {
   constructor() {
@@ -63,4 +63,4 @@ class Validator extends akkajs_dom.DomActor {
   }
 }
 
-let example = system.spawn(new Validator())
+const example = system.spawn(new Validator())
