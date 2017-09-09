@@ -9,15 +9,13 @@
     "virtual-dom": "latest"
   },
   "scripts": {
-    "start": "watchify main.js -o out.js",
-    "build": "browserify main.js -o out.js"
+    "start": "webpack --watch",
+    "build": "webpack"
   },
   "devDependencies": {
-    "browserify": "latest",
-    "babelify": "latest",
-    "babel-plugin-transform-react-jsx": "latest"
-  },
-  "browserify": {
-   "transform": ["babelify"]
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-react-jsx": "latest",
+    "webpack": "^3.5.6"
   }
 }
