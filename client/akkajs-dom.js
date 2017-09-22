@@ -19,11 +19,14 @@ class DomActor extends akkajs.Actor {
   init() {
     this.render = this.render.bind(this)
     this.update = this.update.bind(this)
+    this.mount = this.mount.bind(this)
 
     this.receive = this.receive.bind(this)
     this.preStart = this.preStart.bind(this)
     this.preMount = this.preMount.bind(this)
-    this.afterMount = this.afterMount.bind(this)
+    this.postMount = this.postMount.bind(this)
+    this.preUnmount = this.preUnmount.bind(this)
+    this.postUnmount = this.postUnmount.bind(this)
     this.postStop = this.postStop.bind(this)
 
     //this.tree = this.render()
@@ -41,45 +44,45 @@ class DomActor extends akkajs.Actor {
       this.tree = newTree
     }
   }
+  mount() {
+    this.preMount()
+    if (this.node === undefined) {
+      this.update()
+    }
+    this.parentNode.appendChild(this.node)
+    this.postMount()
+  }
   preStart() {
     if (this.parentNode !== undefined) {
-      //Refactoring needed
-      this.preMount()
-      if (this.node === undefined) {
-        this.update()
-      }
-      this.parentNode.appendChild(this.node)
-      this.afterMount()
+      this.mount()
     } else {
       this.parent().tell(new GetParentNode())
     }
   }
-  preMount() {}
-  afterMount() {}
   receive(msg) {
     if (msg instanceof Update) {
       this.update(msg.value)
     } else if (msg instanceof GetParentNode) {
       this.sender().tell(new ParentNode(this.node))
     } else if (msg instanceof ParentNode) {
-      //Refactoring needed
-      this.preMount()
-      if (this.node === undefined) {
-        this.update()
-      }
       this.parentNode = msg.node
-      this.parentNode.appendChild(this.node)
-      this.afterMount()
+      this.mount()
     } else {
       this.operative(msg)
     }
   }
   postStop() {
+    this.preUnmount()
     try {
       this.parentNode.removeChild(this.node)
       this.node.remove()
     } catch (e) {}
+    this.postUnmount()
   }
+  preMount() {}
+  postMount() {}
+  preUnmount() {}
+  postUnmount() {}
 }
 
 class DomActorFromTemplate extends DomActor {
