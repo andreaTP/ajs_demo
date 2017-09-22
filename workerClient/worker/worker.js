@@ -5,40 +5,7 @@ const akkajs_dom = require('./akkajs-dom.js')
 
 const system = akkajs.ActorSystem.create()
 
-class Comm extends akkajs.Actor {
-  constructor() {
-    super()
-    this.name = "pinger"
-    this.receive = this.receive.bind(this)
-  }
-  receive(msg) {
-    if (this.sender() === undefined)
-      console.log("RECEIVED MESSAGE FROM UI %o", msg)
-    else {
-      console.log("sending msg to UI")
-      postMessage(msg)
-    }
-  }
-}
-
-comm = system.spawn(new Comm())
-
-onmessage = function(e) {
-  console.log('Message received from main script')
-  comm.tell(e , undefined)
-}
-
-// setTimeout(
-//   () => {
-//     comm.tell("ciao", comm)
-//   }, 5000
-// )
-
 class Example extends akkajs_dom.DomActor {
-  //contructor to be fixed
-  constructor() {
-    super(undefined, comm)
-  }
   render() {
     return <h2>Hello Son</h2>
   }
@@ -46,7 +13,7 @@ class Example extends akkajs_dom.DomActor {
 
 class Counter extends akkajs_dom.DomActor {
   constructor() {
-    super("root", comm)
+    super("root")
   }
   receive(msg) {
     if (this.status === undefined) {

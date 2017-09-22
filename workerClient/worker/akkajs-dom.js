@@ -8,10 +8,9 @@ const serializePatch = require('vdom-serialized-patch/serialize')
 class Update { constructor(value) { this.value = value } }
 
 class DomActor extends akkajs.Actor {
-  constructor(parentNode, comm) {
+  constructor(parentNode) {
     super()
     this.parentNode = parentNode
-    this.comm = comm
 
     this.render = this.render.bind(this)
     this.update = this.update.bind(this)
@@ -26,7 +25,7 @@ class DomActor extends akkajs.Actor {
       serializePatch(diff(this.node, newNode))
     serializedPatch.update = this.path()
     serializedPatch.id = this.path()
-    comm.tell(serializedPatch)
+    postMessage(serializedPatch)
     this.node = newNode
   }
   mount() {
@@ -37,7 +36,7 @@ class DomActor extends akkajs.Actor {
     let node = toJson(this.node)
     node.create = this.parentNode
     node.id = this.path()
-    comm.tell(node)
+    postMessage(node)
   }
   preStart() {
     if (this.parentNode === undefined) {
@@ -50,7 +49,7 @@ class DomActor extends akkajs.Actor {
   }
   postStop() {
     console.log("has to remove")
-    comm.tell({"remove": this.path()})
+    postMessage({"remove": this.path()})
   }
 }
 
