@@ -33,7 +33,10 @@ worker.onmessage = function(e) {
       let node = elems.get(e.data.remove)
       node.parentNode.removeChild(node)
       node.remove()
-    } catch (e) {}
+    } catch (e) {
+    } finally {
+      elems.remove(e.data.remove)
+    }
   } else {
     console.log("unmatched message %o", e.data)
   }
