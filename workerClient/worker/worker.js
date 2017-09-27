@@ -101,12 +101,10 @@ class EchoedInput extends akkajs_dom.DomActor {
 class EchoOut extends akkajs_dom.DomActor {
   postMount() {
     this.status = ""
+    this.update("type above")
   }
   render(value) {
-    if (value === undefined)
-      return <p>type above</p>
-    else
-      return <p>{value}</p>
+    return <p>{value}</p>
   }
   receive(msg) {
     if (msg == 'a') {
