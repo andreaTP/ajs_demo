@@ -3,6 +3,8 @@ const h = require('virtual-dom/h')
 const akkajs = require('akkajs')
 const akkajs_dom = require('./akkajs-dom.js')
 
+const dom_handlers = require('../shared/dom-handlers.js')
+
 const system = akkajs.ActorSystem.create()
 
 class Example extends akkajs_dom.DomActor {
@@ -16,6 +18,12 @@ class Counter extends akkajs_dom.DomActor {
     super("root")
   }
   receive(msg) {
+    console.log("RECEIVED %o", msg)
+    if (msg.id) {
+      console.log("YAY " + msg.id)
+      return
+    }
+
     if (this.status === undefined) {
       this.status = 0
     } else {
@@ -26,6 +34,10 @@ class Counter extends akkajs_dom.DomActor {
       this.spawn(
         new Example()
       )
+    }
+
+    if (this.status == 3) {
+      this.register("click", dom_handlers.clickActionHandler, system)
     }
 
     if (this.status > 10) {
@@ -49,5 +61,5 @@ const example = system.spawn(new Counter())
 const interval = setInterval(
   function() {
     example.tell("1")
-  }, 2000
+  }, 1000
 )

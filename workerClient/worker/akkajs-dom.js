@@ -5,23 +5,43 @@ const createElement = require('virtual-dom/create-element')
 const toJson = require('vdom-as-json').toJson
 const serializePatch = require('vdom-serialized-patch/serialize')
 
-class Update { constructor(value) { this.value = value } }
+const systems = new Map()
+
+onmessage = function(e) {
+  // console.log("received from main thread %o", e.data)
+  const sys = systems.get(getSystemPath(e.data.id))
+  sys.select(e.data.id).tell(e.data.value)
+}
+
+const getSystemPath = function(actorPath) {
+  const splitted = actorPath.split('/')
+  return (splitted[0] + "//" + splitted[2] + "/" + splitted[3])
+}
 
 class DomActor extends akkajs.Actor {
   constructor(parentNode) {
     super()
+    // internal usage
     this.parentNode = parentNode
 
+    // filled by user
     this.render = this.render.bind(this)
-    this.update = this.update.bind(this)
 
+    // called by user
+    this.update = this.update.bind(this)
+    this.register = this.register.bind(this)
+
+    // internal usage
+    this.mount = this.mount.bind(this)
+
+    //filled by user
     this.receive = this.receive.bind(this)
     this.preStart = this.preStart.bind(this)
     this.postStop = this.postStop.bind(this)
   }
   update(newValue) {
-    let newNode = this.render(newValue)
-    let serializedPatch =
+    const newNode = this.render(newValue)
+    const serializedPatch =
       serializePatch(diff(this.node, newNode))
     serializedPatch.update = this.path()
     serializedPatch.id = this.path()
@@ -33,28 +53,36 @@ class DomActor extends akkajs.Actor {
       this.node = this.render()
     }
 
-    let node = toJson(this.node)
+    const node = toJson(this.node)
     node.create = this.parentNode
     node.id = this.path()
     postMessage(node)
   }
+  register(eventName, eventFunction, system/* this go in binfdings */) {
+    const reg = {}
+    reg.register = eventName
+    reg.function = eventFunction.name
+    reg.id = this.path()
+
+    const splitted = this.path().split('/')
+    const systemPath = splitted[0] + "//" + splitted[2] + "/" + splitted[3]
+
+    systems.set(systemPath, system /* should be this.system() */)
+    postMessage(reg)
+  }
   preStart() {
     if (this.parentNode === undefined) {
-      let lio = this.path().lastIndexOf("/")
+      const lio = this.path().lastIndexOf("/")
       this.parentNode = this.path().substring(0, lio)
     }
-    console.log("parent is "+this.parentNode)
 
     this.mount()
   }
   postStop() {
-    console.log("has to remove")
     postMessage({"remove": this.path()})
   }
 }
 
-
 module.exports = {
-  Update: Update,
-  DomActor: DomActor
+  DomActor
 }
