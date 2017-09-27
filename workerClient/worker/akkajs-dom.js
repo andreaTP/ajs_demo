@@ -8,7 +8,6 @@ const serializePatch = require('vdom-serialized-patch/serialize')
 const systems = new Map()
 
 onmessage = function(e) {
-  // console.log("received from main thread %o", e.data)
   const sys = systems.get(getSystemPath(e.data.id))
   sys.select(e.data.id).tell(e.data.value)
 }
@@ -64,10 +63,9 @@ class DomActor extends akkajs.Actor {
     reg.function = eventFunction.name
     reg.id = this.path()
 
-    const splitted = this.path().split('/')
-    const systemPath = splitted[0] + "//" + splitted[2] + "/" + splitted[3]
+    console.log(this.system())
 
-    systems.set(systemPath, system /* should be this.system() */)
+    systems.set(getSystemPath(this.path()), this.system())
     postMessage(reg)
   }
   preStart() {

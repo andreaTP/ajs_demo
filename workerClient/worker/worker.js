@@ -37,7 +37,7 @@ class Counter extends akkajs_dom.DomActor {
     }
 
     if (this.status == 3) {
-      this.register("click", dom_handlers.clickActionHandler, system)
+      this.register("click", dom_handlers.clickActionHandler)
     }
 
     if (this.status > 10) {
