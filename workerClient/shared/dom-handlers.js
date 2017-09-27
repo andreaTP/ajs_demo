@@ -1,10 +1,20 @@
 
-const clickActionHandler = function(event) {
+const getInputValue = function(event) {
+  return document.getElementById("elem").value
+}
+
+const getKeyUp = function(event) {
+  return event.key
+}
+
+const killMe = function(event) {
   return {
-    "id": "YAY"
+    "killMe": true
   }
 }
 
 module.exports = {
-  clickActionHandler
+  getInputValue,
+  getKeyUp,
+  killMe
 }

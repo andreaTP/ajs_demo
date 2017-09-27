@@ -58,7 +58,7 @@ class DomActor extends akkajs.Actor {
     } else {
       this.parent().tell(new GetParentNode())
     }
-  }
+  } // TODO refactor with a global map of actors remove messages around
   receive(msg) {
     if (msg instanceof Update) {
       this.update(msg.value)

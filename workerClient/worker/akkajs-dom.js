@@ -37,6 +37,8 @@ class DomActor extends akkajs.Actor {
     this.receive = this.receive.bind(this)
     this.preStart = this.preStart.bind(this)
     this.postStop = this.postStop.bind(this)
+
+    this.postMount = this.postMount.bind(this)
   }
   update(newValue) {
     const newNode = this.render(newValue)
@@ -56,14 +58,14 @@ class DomActor extends akkajs.Actor {
     node.create = this.parentNode
     node.id = this.path()
     postMessage(node)
+
+    this.postMount()
   }
   register(eventName, eventFunction, system/* this go in binfdings */) {
     const reg = {}
     reg.register = eventName
     reg.function = eventFunction.name
     reg.id = this.path()
-
-    console.log(this.system())
 
     systems.set(getSystemPath(this.path()), this.system())
     postMessage(reg)
@@ -79,6 +81,7 @@ class DomActor extends akkajs.Actor {
   postStop() {
     postMessage({"remove": this.path()})
   }
+  postMount() { }
 }
 
 module.exports = {

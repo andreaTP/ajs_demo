@@ -31,15 +31,16 @@ worker.onmessage = function(e) {
     // console.log("updating")
     applyPatch(elems.get(e.data.id), e.data)
   } else if (e.data.remove !== undefined) {
-    // console.log("removing")
+    const node = elems.get(e.data.remove)
+
     try {
-      const node = elems.get(e.data.remove)
       node.parentNode.removeChild(node)
+    } catch (e) {}
+    try {
       node.remove()
-    } catch (e) {
-    } finally {
-      elems.delete(e.data.remove)
-    }
+    } catch (e) {}
+
+    elems.delete(e.data.remove)
   } else if (e.data.register) {
     // console.log("registering function")
     const elem = elems.get(e.data.id)
