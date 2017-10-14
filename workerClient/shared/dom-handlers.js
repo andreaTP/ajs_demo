@@ -13,8 +13,15 @@ const killMe = function(event) {
   }
 }
 
+const click = function(event) {
+  return {
+    "click": true
+  }
+}
+
 module.exports = {
   getInputValue,
   getKeyUp,
-  killMe
+  killMe,
+  click
 }

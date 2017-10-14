@@ -7,9 +7,27 @@ const serializePatch = require('vdom-serialized-patch/serialize')
 
 const systems = new Map()
 
-onmessage = function(e) {
-  const sys = systems.get(getSystemPath(e.data.id))
-  sys.select(e.data.id).tell(e.data.value)
+//refactor all of this
+// please keep also an implementation for running in single thread
+
+let port = undefined
+
+onconnect = function(e) {
+  port = e.ports[0]
+
+  port.onmessage = function(e) {
+    const sys = systems.get(getSystemPath(e.data.id))
+    sys.select(e.data.id).tell(e.data.value)
+  }
+
+  //check for refactoring akka_js_dom implementations
+  /*
+  if (global instanceof SharedWorkerGlobalScope) {
+    port.postMessage("Yes I'm a shared worker!!!")
+  } else {
+    port.postMessage("not a shared worker? ")
+  }
+  */
 }
 
 const getSystemPath = function(actorPath) {
@@ -47,7 +65,7 @@ class DomActor extends akkajs.Actor {
       serializePatch(diff(this.node, newNode))
     serializedPatch.update = this.path()
     serializedPatch.id = this.path()
-    postMessage(serializedPatch)
+    port.postMessage(serializedPatch)
     this.node = newNode
   }
   mount() {
@@ -58,7 +76,7 @@ class DomActor extends akkajs.Actor {
     const node = toJson(this.node)
     node.create = this.parentNode
     node.id = this.path()
-    postMessage(node)
+    port.postMessage(node)
 
     const events = this.events()
     for (const k in events) {
@@ -75,7 +93,7 @@ class DomActor extends akkajs.Actor {
     reg.id = this.path()
 
     systems.set(getSystemPath(this.path()), this.system())
-    postMessage(reg)
+    port.postMessage(reg)
   }
   preStart() {
     if (this.parentNode === undefined) {
@@ -86,7 +104,7 @@ class DomActor extends akkajs.Actor {
     this.mount()
   }
   postStop() {
-    postMessage({"remove": this.path()})
+    port.postMessage({"remove": this.path()})
   }
   postMount() { }
 }

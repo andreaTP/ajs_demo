@@ -12,15 +12,15 @@ class ToDoList extends akkajs_dom.DomActor {
   constructor() {
     super("root")
   }
-  postMount() {
-    this.spawn(new Button())
-  }
   render(value) {
     return <div>{[
       <input id="elem"></input>,
       <div id="button"/>,
       <ul id="list"></ul>
     ]}</div>
+  }
+  postMount() {
+    this.spawn(new Button())
   }
   receive(msg) {
     this.spawn(new ListElement(msg))
@@ -31,11 +31,11 @@ class Button extends akkajs_dom.DomActor {
   constructor() {
     super("button")
   }
-  postMount() {
-    this.register("click", dom_handlers.getInputValue)
-  }
   render() {
     return <button>Add</button>
+  }
+  events() {
+    return { "click": dom_handlers.getInputValue }
   }
   receive(msg) {
     this.parent().tell(msg)
@@ -47,20 +47,20 @@ class ListElement extends akkajs_dom.DomActor {
     super("list")
     this.value = value
   }
-  postMount() {
-    this.spawn(new KillButton())
-  }
   render() {
     return <li>{this.value}</li>
+  }
+  postMount() {
+    this.spawn(new KillButton())
   }
 }
 
 class KillButton extends akkajs_dom.DomActor {
-  postMount() {
-    this.register("click", dom_handlers.killMe)
-  }
   render() {
     return <button>X</button>
+  }
+  events() {
+    return { "click": dom_handlers.killMe }
   }
   receive(msg) {
     if (msg.killMe) {
@@ -75,36 +75,46 @@ class Validator extends akkajs_dom.DomActor {
   constructor() {
     super("root")
   }
-  postMount() {
-    this.spawn(new EchoedInput())
-  }
   render(value) {
     return <div>
         <h4>Validator type everything but "a"</h4>
     </div>
   }
+  postMount() {
+    this.spawn(new EchoedInput())
+  }
 }
 
 class EchoedInput extends akkajs_dom.DomActor {
-  postMount() {
-    this.register("keyup", dom_handlers.getKeyUp)
-    this.echo = this.spawn(new EchoOut())
-  }
   render() {
     return <div><input></input></div>
   }
+  events() {
+    return { "keyup": dom_handlers.getKeyUp }
+  }
+  postMount() {
+    this.echo = this.spawn(new EchoOut())
+  }
   receive(msg) {
-    this.echo.tell(msg)
+    if (msg instanceof ResetInput) {
+      this.update()
+    } else {
+      this.echo.tell(msg)
+    }
   }
 }
 
+class ResetInput{}
+const reset = new ResetInput()
+
 class EchoOut extends akkajs_dom.DomActor {
-  postMount() {
-    this.status = ""
-    this.update("type above")
-  }
   render(value) {
     return <p>{value}</p>
+  }
+  postMount() {
+    this.parent().tell(reset)
+    this.status = ""
+    this.update("type above")
   }
   receive(msg) {
     if (msg == 'a') {
