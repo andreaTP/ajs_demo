@@ -1,9 +1,9 @@
 /** @jsx h */
 const h = require('virtual-dom/h')
 const akkajs = require('akkajs')
-const akkajs_dom = require('../akkajs-dom/akkajs-dom.js')
+const akkajs_dom = require('./akkajs-dom/akkajs-dom.js')
 
-const dom_handlers = require('../handlers/dom-handlers.js')
+const dom_handlers = require('./dom-handlers.js')
 
 const system = akkajs.ActorSystem.create()
 

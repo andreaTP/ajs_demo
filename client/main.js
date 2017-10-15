@@ -1,9 +1,9 @@
 /** @jsx h */
-const akkajs_dom_front = require('../akkajs-dom/akkajs-dom-front.js')
-const domHandlers = require('../handlers/dom-handlers.js')
+const akkajs_dom_front = require('./akkajs-dom/akkajs-dom-front.js')
+const domHandlers = require('./dom-handlers.js')
 
 new akkajs_dom_front.UiManager(
-  //require('../simple/simple.js'),
+  //require('./simple.js'),
   new Worker('./js/simple.out.js'),
   domHandlers
 )
@@ -24,8 +24,8 @@ new akkajs_dom_front.UiManager(
 )
 
 new akkajs_dom_front.UiManager(
-  require('../demo/demo.js'),
-  //new Worker('./js/demo.out.js'),
+  //require('./demo.js'),
+  new Worker('./js/demo.out.js'),
   domHandlers
 )
 
@@ -40,7 +40,7 @@ new akkajs_dom_front.UiManager(
 )
 
 new akkajs_dom_front.UiManager(
-  //require('../prime/prime.js')
+  //require('./prime.js')
   new Worker('./js/prime.out.js'),
   domHandlers
 )
