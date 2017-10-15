@@ -1,7 +1,7 @@
 /** @jsx h */
 const h = require('virtual-dom/h')
 const akkajs = require('akkajs')
-const akkajs_dom = require('./akkajs-dom.js')
+const akkajs_dom = require('../akkajs-dom/akkajs-dom.js')
 
 const dom_handlers = require('../handlers/dom-handlers.js')
 
@@ -10,11 +10,10 @@ const system = akkajs.ActorSystem.create()
 
 class PrimeUI extends akkajs_dom.DomActor {
   constructor() {
-    super("root2")
+    super("root")
   }
   render(value) {
     return <div>{[
-      <p>Last prime is:</p>,
       <h1>{value}</h1>
     ]}</div>
   }
@@ -29,9 +28,9 @@ class PrimeUI extends akkajs_dom.DomActor {
 class StartButton extends akkajs_dom.DomActor {
   render() {
     if (this.status === undefined || this.status == false) {
-      return <button>Start</button>
+      return <button>Get primes</button>
     } else {
-      return <label>started</label>
+      return <div></div>
     }
   }
   events() {
@@ -48,9 +47,8 @@ class StartButton extends akkajs_dom.DomActor {
 }
 
 const nextPrime = function(last) {
-  let found = false
   let num = last + 1
-  while (!found) {
+  while (true) {
     let check = num - 1
     while (
       check > 1 &&
@@ -72,9 +70,13 @@ const primeUI = system.spawn(new PrimeUI())
 class PrimeFinder extends akkajs.Actor {
   receive(last) {
     let next = nextPrime(last)
-    primeUI.tell("found "+next)
+    primeUI.tell(next)
     // if we wanna stop it .. because messages are scheduled on setImmediate
     // setTimeout(() => {this.self().tell(next)}, 0)
     this.self().tell(next)
   }
+}
+
+module.exports = {
+  localPort: akkajs_dom.localPort
 }

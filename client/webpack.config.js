@@ -1,7 +1,15 @@
+const path = require("path");
 module.exports = {
-  entry: './main.js',
+  entry: {
+    main: "./main/main.js",
+    demo: "./demo/demo.js",
+    simple: "./simple/simple.js",
+    prime: "./prime/prime.js"
+  },
   output: {
-    filename: 'out.js'
+    path: path.join(__dirname, "js"),
+    filename: "[name].out.js",
+    chunkFilename: "[id].chunk.js"
   },
   module: {
     rules: [

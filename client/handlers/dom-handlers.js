@@ -1,6 +1,6 @@
 
 const getInputValue = function(event) {
-  return document.getElementById("elem").value
+  return event.srcElement.parentNode.parentNode.childNodes[0].value
 }
 
 const getKeyUp = function(event) {

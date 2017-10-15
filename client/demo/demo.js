@@ -1,35 +1,41 @@
 /** @jsx h */
 const h = require('virtual-dom/h')
 const akkajs = require('akkajs')
-const akkajs_dom = require('./akkajs-dom.js')
+const akkajs_dom = require('../akkajs-dom/akkajs-dom.js')
 
 const dom_handlers = require('../handlers/dom-handlers.js')
 
 const system = akkajs.ActorSystem.create()
 
+const uuid = function() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  )
+}
 
 class ToDoList extends akkajs_dom.DomActor {
   constructor() {
     super("root")
+    this.id = uuid()
   }
   render(value) {
     return <div>{[
-      <input id="elem"></input>,
-      <div id="button"/>,
-      <ul id="list"></ul>
+      <input id={"elem" + this.id}></input>,
+      <div id={"button" + this.id}/>,
+      <ul id={"list" + this.id}></ul>
     ]}</div>
   }
   postMount() {
-    this.spawn(new Button())
+    this.spawn(new Button(this.id))
   }
   receive(msg) {
-    this.spawn(new ListElement(msg))
+    this.spawn(new ListElement(this.id, msg))
   }
 }
 
 class Button extends akkajs_dom.DomActor {
-  constructor() {
-    super("button")
+  constructor(id) {
+    super("button" + id)
   }
   render() {
     return <button>Add</button>
@@ -43,8 +49,8 @@ class Button extends akkajs_dom.DomActor {
 }
 
 class ListElement extends akkajs_dom.DomActor {
-  constructor(value) {
-    super("list")
+  constructor(id, value) {
+    super("list" + id)
     this.value = value
   }
   render() {
@@ -127,3 +133,7 @@ class EchoOut extends akkajs_dom.DomActor {
 }
 
 const example = system.spawn(new Validator())
+
+module.exports = {
+  localPort: akkajs_dom.localPort
+}

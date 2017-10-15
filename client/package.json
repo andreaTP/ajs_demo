@@ -6,7 +6,9 @@
   "license": "MIT",
   "dependencies": {
     "akkajs": "latest",
-    "virtual-dom": "latest"
+    "virtual-dom": "latest",
+    "vdom-as-json": "latest",
+    "vdom-serialized-patch": "latest"
   },
   "scripts": {
     "start": "webpack --watch",
