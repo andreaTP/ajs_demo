@@ -4,7 +4,8 @@ module.exports = {
     main: "./main.js",
     demo: "./demo.js",
     simple: "./simple.js",
-    prime: "./prime.js"
+    prime: "./prime.js",
+    pingpong: "./pingpong.js"
   },
   output: {
     path: path.join(__dirname, "js"),

@@ -2,6 +2,7 @@
 const akkajs_dom_front = require('./akkajs-dom/akkajs-dom-front.js')
 const domHandlers = require('./dom-handlers.js')
 
+/*
 new akkajs_dom_front.UiManager(
   //require('./simple.js'),
   new Worker('./js/simple.out.js'),
@@ -53,3 +54,23 @@ for (i=0; i<primesN; i++) {
     domHandlers
   )
 }
+*/
+
+const ping = new SharedWorker('./js/pingpong.out.js', 'ping')
+const pong = new SharedWorker('./js/pingpong.out.js', 'pong')
+
+new akkajs_dom_front.UiManager(
+  ping,
+  domHandlers,
+  function(e) {
+    pong.port.postMessage(e.data)
+  }
+)
+
+new akkajs_dom_front.UiManager(
+  pong,
+  domHandlers,
+  function(e) {
+    ping.port.postMessage(e.data)
+  }
+)

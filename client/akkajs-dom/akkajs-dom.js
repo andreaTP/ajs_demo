@@ -20,7 +20,7 @@ class LocalPort {
 }
 
 let localPort = undefined
-let sharedWorkerPort = undefined
+const sharedWorkerPort = {}
 
 const localOnMessage =  function(e) {
   const sys = systems.get(getSystemPath(e.data.id))
@@ -32,11 +32,20 @@ let binded = false
 try {
   if (global instanceof SharedWorkerGlobalScope) {
     onconnect = function(e) {
-      sharedWorkerPort = e.ports[0]
+      sharedWorkerPort.port = e.ports[0]
 
-      sharedWorkerPort.onmessage = localOnMessage
+      sharedWorkerPort.port.onmessage = localOnMessage
 
-      localPostMessage = function(e) {sharedWorkerPort.postMessage(e)}
+      localPostMessage = function(e) {sharedWorkerPort.port.postMessage(e)}
+
+      //just an helper ...
+      sharedWorkerPort.postMessage = function(e) {sharedWorkerPort.port.postMessage(e)}
+      sharedWorkerPort.tellTo = function(rec, msg) {
+        sharedWorkerPort.port.postMessage({
+          "id": rec,
+          "value": msg
+        })
+      }
     }
     binded = true
   }
@@ -138,5 +147,6 @@ class DomActor extends akkajs.Actor {
 
 module.exports = {
   DomActor,
-  localPort
+  localPort,
+  sharedWorkerPort
 }

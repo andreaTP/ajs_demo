@@ -1,0 +1,21 @@
+{
+  "name": "akkajs_demo_ui",
+  "version": "1.0.0",
+  "description": "Demo usage of Akka.Js from JS Client side",
+  "author": "Andrea Peruffo",
+  "license": "MIT",
+  "dependencies": {
+    "akkajs": "latest",
+    "bufferutil": "^3.0.0",
+    "node-tweet-stream": "latest",
+    "utf-8-validate": "^3.0.1",
+    "websocket": "latest"
+  },
+  "scripts": {
+    "start": "webpack --watch",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^3.5.6"
+  }
+}
