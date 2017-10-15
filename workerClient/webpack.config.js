@@ -2,15 +2,16 @@ const path = require("path");
 module.exports = {
   entry: {
     main: "./main/main.js",
-    worker: "./worker/worker.js",
-    sharedw: "./sharedw/sharedw.js",
-    sharedw2: "./sharedw/sharedw.js",
-    sharedw3: "./sharedw/sharedw.js",
-    sharedw4: "./sharedw/sharedw.js",
-    sharedw5: "./sharedw/sharedw.js",
-    sharedw6: "./sharedw/sharedw.js",
-    sharedw7: "./sharedw/sharedw.js",
-    sharedw8: "./sharedw/sharedw.js"
+    demo: "./demo/demo.js",
+    local: "./local/local.js",
+    prime1: "./prime/prime.js",
+    prime2: "./prime/prime.js",
+    prime3: "./prime/prime.js",
+    prime4: "./prime/prime.js",
+    prime5: "./prime/prime.js",
+    prime6: "./prime/prime.js",
+    prime7: "./prime/prime.js",
+    prime8: "./prime/prime.js"
   },
   output: {
     path: path.join(__dirname, "js"),
