@@ -12,6 +12,11 @@ module.exports = {
     filename: "[name].out.js",
     chunkFilename: "[id].chunk.js"
   },
+  resolve: {
+    alias: {
+      akkajs: path.resolve('./node_modules/akkajs'),
+    },
+  },
   module: {
     rules: [
       {

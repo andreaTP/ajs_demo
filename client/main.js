@@ -1,5 +1,5 @@
 /** @jsx h */
-const akkajs_dom_front = require('./akkajs-dom/akkajs-dom-front.js')
+const akkajs_dom_page = require('akkajs-dom/page')
 const domHandlers = require('./dom-handlers.js')
 
 /*
@@ -59,7 +59,7 @@ for (i=0; i<primesN; i++) {
 const ping = new SharedWorker('./js/pingpong.out.js', 'ping')
 const pong = new SharedWorker('./js/pingpong.out.js', 'pong')
 
-new akkajs_dom_front.UiManager(
+new akkajs_dom_page.UiManager(
   ping,
   domHandlers,
   function(e) {
@@ -67,7 +67,7 @@ new akkajs_dom_front.UiManager(
   }
 )
 
-new akkajs_dom_front.UiManager(
+new akkajs_dom_page.UiManager(
   pong,
   domHandlers,
   function(e) {
