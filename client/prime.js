@@ -5,7 +5,7 @@ const akkajs_dom = require('akkajs-dom/work')
 
 const dom_handlers = require('./dom-handlers.js')
 
-//const system = akkajs.ActorSystem.create()
+const system = akkajs.ActorSystem.create()
 
 
 class PrimeUI extends akkajs_dom.DomActor {
@@ -13,7 +13,7 @@ class PrimeUI extends akkajs_dom.DomActor {
     super("root")
   }
   render(value) {
-    return <div>{[
+    return <div className="box">{[
       <h1>{value}</h1>
     ]}</div>
   }

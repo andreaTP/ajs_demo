@@ -14,7 +14,7 @@ class PingPong extends akkajs_dom.DomActor {
     this.name = "ping"
   }
   render(value) {
-    return <div>{[
+    return <div className="box">{[
       <h1>PingPong</h1>,
       <p>{"received " + value + " pings"}</p>
     ]}</div>

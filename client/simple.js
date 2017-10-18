@@ -18,9 +18,13 @@ class Example extends akkajs_dom.DomActor {
   }
   render(value) {
     if (value === undefined) {
-      return <h1>Hello</h1>
+      return <div className="box">
+        <h1>Hello</h1>
+      </div>
     } else {
-      return <h1>{++this.status}</h1>
+      return <div className="box">
+        <h1>{++this.status}</h1>
+      </div>
     }
   }
   receive(msg) {

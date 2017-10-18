@@ -1,6 +1,7 @@
 const path = require("path");
 
 module.exports = {
+  target: "node",
   entry: {
     main: "./main.js"
   },
@@ -8,5 +9,11 @@ module.exports = {
     path: path.join(__dirname, "js"),
     filename: "[name].out.js",
     chunkFilename: "[id].chunk.js"
+  },
+  node: {
+    console: false,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
   }
 }

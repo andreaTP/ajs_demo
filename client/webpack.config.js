@@ -2,10 +2,12 @@ const path = require("path");
 module.exports = {
   entry: {
     main: "./main.js",
-    demo: "./demo.js",
+    todo: "./todo.js",
+    validator: "./validator.js",
     simple: "./simple.js",
     prime: "./prime.js",
-    pingpong: "./pingpong.js"
+    pingpong: "./pingpong.js",
+    twitter: "./twitter.js"
   },
   output: {
     path: path.join(__dirname, "js"),
