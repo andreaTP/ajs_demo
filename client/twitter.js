@@ -1,33 +1,33 @@
 /** @jsx h */
-const h = require('virtual-dom/h')
-const akkajs = require('akkajs')
-const akkajs_dom = require('akkajs-dom/work')
+const h = require("virtual-dom/h")
+const akkajs = require("akkajs")
+const akkajs_dom = require("akkajs-dom/work")
 
-const dom_handlers = require('./dom-handlers.js')
-const utils = require('./utils.js')
+const dom_handlers = require("./dom-handlers.js")
+const utils = require("./utils.js")
 
 const system = akkajs.ActorSystem.create()
 
 class Track {
-  constructor(topic) {
+  constructor (topic) {
     this.topic = topic
   }
 }
 class Tweet {
-  constructor(from, text) {
+  constructor (from, text) {
     this.from = from
     this.text = text
   }
 }
 
 class WSActor extends akkajs.Actor {
-  constructor(address) {
+  constructor (address) {
     super()
 
     this.address = address
     this.operative = this.operative.bind(this)
   }
-  preStart() {
+  preStart () {
     this.ws = new WebSocket(this.address)
 
     this.ws.onopen = () => {
@@ -37,13 +37,11 @@ class WSActor extends akkajs.Actor {
       this.self().tell(event.data)
     }
   }
-  receive(msg) {
+  receive () {
     console.log("not ready...")
   }
-  operative(msg) {
-    if (msg instanceof Track)
-      this.ws.send(msg.topic)
-    else {
+  operative (msg) {
+    if (msg instanceof Track) { this.ws.send(msg.topic) } else {
       const json = JSON.parse(msg)
       this.parent().tell(new Tweet(json.user.name, json.text))
     }
@@ -51,12 +49,12 @@ class WSActor extends akkajs.Actor {
 }
 
 class TwitterUiActor extends akkajs_dom.DomActor {
-  constructor(address) {
+  constructor (address) {
     super("root")
     this.id = utils.uuid()
     this.address = address
   }
-  render(value) {
+  render (value) {
     let from = "finger crossed"
     let msg = "not yet arrived"
     if (value !== undefined && value instanceof Tweet) {
@@ -64,39 +62,39 @@ class TwitterUiActor extends akkajs_dom.DomActor {
       msg = value.text
     }
 
-    return <div className="box">{[
-      <input id={"elem" + this.id}></input>,
-      <div id={"button" + this.id}/>,
+    return <div className='box'>{[
+      <input id={"elem" + this.id} />,
+      <div id={"button" + this.id} />,
       <h3 id={("from" + this.id).toUpperCase()}>{from}</h3>,
       <p id={"msg" + this.id}>{msg}</p>
     ]}</div>
   }
-  postMount() {
+  postMount () {
     this.wsActor = this.spawn(new WSActor(this.address))
     this.spawn(new TrackButton(this.id, this.wsActor))
   }
-  receive(msg) {
+  receive (msg) {
     this.update(msg)
   }
 }
 
 class TrackButton extends akkajs_dom.DomActor {
-  constructor(id, wsActor) {
+  constructor (id, wsActor) {
     super("button" + id)
     this.wsActor = wsActor
   }
-  render() {
+  render () {
     return <button>Track</button>
   }
-  events() {
+  events () {
     return { "click": dom_handlers.getInputValue }
   }
-  receive(msg) {
+  receive (msg) {
     this.wsActor.tell(new Track(msg))
   }
 }
 
-const twitter = system.spawn(
+system.spawn(
   new TwitterUiActor("ws://localhost:9002")
 )
 

@@ -1,76 +1,76 @@
 /** @jsx h */
-const h = require('virtual-dom/h')
-const akkajs = require('akkajs')
-const akkajs_dom = require('akkajs-dom/work')
+const h = require("virtual-dom/h")
+const akkajs = require("akkajs")
+const akkajs_dom = require("akkajs-dom/work")
 
-const dom_handlers = require('./dom-handlers.js')
-const utils = require('./utils.js')
+const dom_handlers = require("./dom-handlers.js")
+const utils = require("./utils.js")
 
 const system = akkajs.ActorSystem.create()
 
 class ToDoList extends akkajs_dom.DomActor {
-  constructor() {
+  constructor () {
     super("root")
     this.id = utils.uuid()
   }
-  render(value) {
-    return <div className="box">{[
-      <input id={"elem" + this.id}></input>,
-      <div id={"button" + this.id}/>,
-      <ul id={"list" + this.id}></ul>
+  render () {
+    return <div className='box'>{[
+      <input id={"elem" + this.id} />,
+      <div id={"button" + this.id} />,
+      <ul id={"list" + this.id} />
     ]}</div>
   }
-  postMount() {
+  postMount () {
     this.spawn(new Button(this.id))
   }
-  receive(msg) {
+  receive (msg) {
     this.spawn(new ListElement(this.id, msg))
   }
 }
 
 class Button extends akkajs_dom.DomActor {
-  constructor(id) {
+  constructor (id) {
     super("button" + id)
   }
-  render() {
+  render () {
     return <button>Add</button>
   }
-  events() {
+  events () {
     return { "click": dom_handlers.getInputValue }
   }
-  receive(msg) {
+  receive (msg) {
     this.parent().tell(msg)
   }
 }
 
 class ListElement extends akkajs_dom.DomActor {
-  constructor(id, value) {
+  constructor (id, value) {
     super("list" + id)
     this.value = value
   }
-  render() {
+  render () {
     return <li>{this.value}</li>
   }
-  postMount() {
+  postMount () {
     this.spawn(new KillButton())
   }
 }
 
 class KillButton extends akkajs_dom.DomActor {
-  render() {
+  render () {
     return <button>X</button>
   }
-  events() {
+  events () {
     return { "click": dom_handlers.killMe }
   }
-  receive(msg) {
+  receive (msg) {
     if (msg.killMe) {
       this.parent().kill()
     }
   }
 }
 
-const todoList = system.spawn(new ToDoList())
+system.spawn(new ToDoList())
 
 module.exports = {
   localPort: akkajs_dom.localPort

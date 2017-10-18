@@ -1,41 +1,41 @@
 /** @jsx h */
-const h = require('virtual-dom/h')
-const akkajs = require('akkajs')
-const akkajs_dom = require('akkajs-dom/work')
+const h = require("virtual-dom/h")
+const akkajs = require("akkajs")
+const akkajs_dom = require("akkajs-dom/work")
 
-const dom_handlers = require('./dom-handlers.js')
+const dom_handlers = require("./dom-handlers.js")
 
 const system = akkajs.ActorSystem.create()
 
 class PingPong extends akkajs_dom.DomActor {
-  constructor() {
+  constructor () {
     super("root")
     this.status = 0
     this.name = "ping"
   }
-  render(value) {
-    return <div className="box">{[
+  render (value) {
+    return <div className='box'>{[
       <h1>PingPong</h1>,
       <p>{"received " + value + " pings"}</p>
     ]}</div>
   }
-  postMount() {
+  postMount () {
     this.spawn(new Button())
     this.update(this.status)
   }
-  receive(msg) {
+  receive () {
     this.update(++this.status)
   }
 }
 
 class Button extends akkajs_dom.DomActor {
-  render() {
+  render () {
     return <button>Send Ping</button>
   }
-  events() {
+  events () {
     return { "click": dom_handlers.click }
   }
-  receive(msg) {
+  receive () {
     akkajs_dom.sharedWorkerPort.tellTo(
       "akka://default/user/ping",
       "ping"
@@ -43,7 +43,7 @@ class Button extends akkajs_dom.DomActor {
   }
 }
 
-const pingpong = system.spawn(new PingPong())
+system.spawn(new PingPong())
 
 module.exports = {
   localPort: akkajs_dom.localPort

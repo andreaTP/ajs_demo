@@ -1,50 +1,49 @@
 /** @jsx h */
-const h = require('virtual-dom/h')
-const akkajs = require('akkajs')
-const akkajs_dom = require('akkajs-dom/work')
+const h = require("virtual-dom/h")
+const akkajs = require("akkajs")
+const akkajs_dom = require("akkajs-dom/work")
 
-const dom_handlers = require('./dom-handlers.js')
+const dom_handlers = require("./dom-handlers.js")
 
 const system = akkajs.ActorSystem.create()
 
-
 class Example extends akkajs_dom.DomActor {
-  constructor() {
+  constructor () {
     super("root")
     this.status = 0
   }
-  postMount() {
+  postMount () {
     this.spawn(new Button())
   }
-  render(value) {
+  render (value) {
     if (value === undefined) {
-      return <div className="box">
+      return <div className='box'>
         <h1>Hello</h1>
       </div>
     } else {
-      return <div className="box">
+      return <div className='box'>
         <h1>{++this.status}</h1>
       </div>
     }
   }
-  receive(msg) {
+  receive (msg) {
     this.update(msg)
   }
 }
 
 class Button extends akkajs_dom.DomActor {
-  render() {
+  render () {
     return <button>Click me</button>
   }
-  events() {
+  events () {
     return { "click": dom_handlers.click }
   }
-  receive(msg) {
-    example.tell("click")
+  receive () {
+    this.parent().tell("click")
   }
 }
 
-const example = system.spawn(new Example())
+system.spawn(new Example())
 
 module.exports = {
   localPort: akkajs_dom.localPort

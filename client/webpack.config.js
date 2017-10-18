@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require("path")
 module.exports = {
   entry: {
     main: "./main.js",
@@ -16,14 +16,25 @@ module.exports = {
   },
   resolve: {
     alias: {
-      akkajs: path.resolve('./node_modules/akkajs'),
-    },
+      akkajs: path.resolve("./node_modules/akkajs")
+    }
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
+        loader: "babel-loader"
+      },
+      {
+        enforce: "pre",
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader"
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
       }
     ]
   }

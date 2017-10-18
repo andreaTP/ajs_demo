@@ -1,19 +1,19 @@
 
-const getInputValue = function(event) {
+const getInputValue = function (event) {
   return event.srcElement.parentNode.parentNode.childNodes[0].value
 }
 
-const getKeyUp = function(event) {
+const getKeyUp = function (event) {
   return event.key
 }
 
-const killMe = function(event) {
+const killMe = function () {
   return {
     "killMe": true
   }
 }
 
-const click = function(event) {
+const click = function () {
   return {
     "click": true
   }
