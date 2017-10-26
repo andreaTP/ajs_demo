@@ -1,13 +1,13 @@
 /** @jsx h */
 const h = require("virtual-dom/h")
-const akkajs = require("akkajs")
-const akkajs_dom = require("akkajs-dom/work")
+const { ActorSystem } = require("akkajs")
+const { DomActor, localPort } = require("akkajs-dom/work")
 
-const dom_handlers = require("./dom-handlers.js")
+const domHandlers = require("./dom-handlers.js")
 
-const system = akkajs.ActorSystem.create()
+const system = ActorSystem.create()
 
-class Example extends akkajs_dom.DomActor {
+class Example extends DomActor {
   constructor () {
     super("root")
     this.status = 0
@@ -31,12 +31,12 @@ class Example extends akkajs_dom.DomActor {
   }
 }
 
-class Button extends akkajs_dom.DomActor {
+class Button extends DomActor {
   render () {
     return <button>Click me</button>
   }
   events () {
-    return { "click": dom_handlers.click }
+    return { "click": domHandlers.click }
   }
   receive () {
     this.parent().tell("click")
@@ -46,5 +46,5 @@ class Button extends akkajs_dom.DomActor {
 system.spawn(new Example())
 
 module.exports = {
-  localPort: akkajs_dom.localPort
+  localPort
 }

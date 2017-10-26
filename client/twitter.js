@@ -1,12 +1,12 @@
 /** @jsx h */
 const h = require("virtual-dom/h")
-const akkajs = require("akkajs")
-const akkajs_dom = require("akkajs-dom/work")
+const { ActorSystem, Actor } = require("akkajs")
+const { DomActor, localPort } = require("akkajs-dom/work")
 
-const dom_handlers = require("./dom-handlers.js")
-const utils = require("./utils.js")
+const domHandlers = require("./dom-handlers.js")
+const { uuid } = require("./utils.js")
 
-const system = akkajs.ActorSystem.create()
+const system = ActorSystem.create()
 
 class Track {
   constructor (topic) {
@@ -20,7 +20,7 @@ class Tweet {
   }
 }
 
-class WSActor extends akkajs.Actor {
+class WSActor extends Actor {
   constructor (address) {
     super()
 
@@ -48,10 +48,10 @@ class WSActor extends akkajs.Actor {
   }
 }
 
-class TwitterUiActor extends akkajs_dom.DomActor {
+class TwitterUiActor extends DomActor {
   constructor (address) {
     super("root")
-    this.id = utils.uuid()
+    this.id = uuid()
     this.address = address
   }
   render (value) {
@@ -78,7 +78,7 @@ class TwitterUiActor extends akkajs_dom.DomActor {
   }
 }
 
-class TrackButton extends akkajs_dom.DomActor {
+class TrackButton extends DomActor {
   constructor (id, wsActor) {
     super("button" + id)
     this.wsActor = wsActor
@@ -87,7 +87,7 @@ class TrackButton extends akkajs_dom.DomActor {
     return <button>Track</button>
   }
   events () {
-    return { "click": dom_handlers.getInputValue }
+    return { "click": domHandlers.getInputValue }
   }
   receive (msg) {
     this.wsActor.tell(new Track(msg))
@@ -99,5 +99,5 @@ system.spawn(
 )
 
 module.exports = {
-  localPort: akkajs_dom.localPort
+  localPort
 }

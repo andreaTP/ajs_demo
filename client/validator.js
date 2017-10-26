@@ -1,13 +1,13 @@
 /** @jsx h */
 const h = require("virtual-dom/h")
-const akkajs = require("akkajs")
-const akkajs_dom = require("akkajs-dom/work")
+const { ActorSystem } = require("akkajs")
+const { DomActor, localPort } = require("akkajs-dom/work")
 
-const dom_handlers = require("./dom-handlers.js")
+const domHandlers = require("./dom-handlers.js")
 
-const system = akkajs.ActorSystem.create()
+const system = ActorSystem.create()
 
-class Validator extends akkajs_dom.DomActor {
+class Validator extends DomActor {
   constructor () {
     super("root")
   }
@@ -21,12 +21,12 @@ class Validator extends akkajs_dom.DomActor {
   }
 }
 
-class EchoedInput extends akkajs_dom.DomActor {
+class EchoedInput extends DomActor {
   render () {
     return <div><input /></div>
   }
   events () {
-    return { "keyup": dom_handlers.getKeyUp }
+    return { "keyup": domHandlers.getKeyUp }
   }
   postMount () {
     this.echo = this.spawn(new EchoOut())
@@ -43,7 +43,7 @@ class EchoedInput extends akkajs_dom.DomActor {
 class ResetInput {}
 const reset = new ResetInput()
 
-class EchoOut extends akkajs_dom.DomActor {
+class EchoOut extends DomActor {
   render (value) {
     return <p>{value}</p>
   }
@@ -65,5 +65,5 @@ class EchoOut extends akkajs_dom.DomActor {
 system.spawn(new Validator())
 
 module.exports = {
-  localPort: akkajs_dom.localPort
+  localPort
 }

@@ -1,13 +1,13 @@
 /** @jsx h */
 const h = require("virtual-dom/h")
-const akkajs = require("akkajs")
-const akkajs_dom = require("akkajs-dom/work")
+const { ActorSystem, Actor } = require("akkajs")
+const { DomActor, localPort } = require("akkajs-dom/work")
 
-const dom_handlers = require("./dom-handlers.js")
+const domHandlers = require("./dom-handlers.js")
 
-const system = akkajs.ActorSystem.create()
+const system = ActorSystem.create()
 
-class PrimeUI extends akkajs_dom.DomActor {
+class PrimeUI extends DomActor {
   constructor () {
     super("root")
   }
@@ -24,7 +24,7 @@ class PrimeUI extends akkajs_dom.DomActor {
   }
 }
 
-class StartButton extends akkajs_dom.DomActor {
+class StartButton extends DomActor {
   render () {
     if (this.status === undefined || this.status === false) {
       return <button>Get primes</button>
@@ -33,7 +33,7 @@ class StartButton extends akkajs_dom.DomActor {
     }
   }
   events () {
-    return { "click": dom_handlers.click }
+    return { "click": domHandlers.click }
   }
   receive () {
     if (this.status === undefined || this.status === false) {
@@ -66,7 +66,7 @@ const nextPrime = function (last) {
 
 const primeUI = system.spawn(new PrimeUI())
 
-class PrimeFinder extends akkajs.Actor {
+class PrimeFinder extends Actor {
   receive (last) {
     let next = nextPrime(last)
     primeUI.tell(next)
@@ -77,5 +77,5 @@ class PrimeFinder extends akkajs.Actor {
 }
 
 module.exports = {
-  localPort: akkajs_dom.localPort
+  localPort
 }
