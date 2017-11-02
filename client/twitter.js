@@ -48,6 +48,22 @@ class WSActor extends Actor {
   }
 }
 
+class TrackButton extends DomActor {
+  constructor (id, wsActor) {
+    super("button" + id)
+    this.wsActor = wsActor
+  }
+  render () {
+    return <button>Track</button>
+  }
+  events () {
+    return { "click": domHandlers.getInputValue }
+  }
+  receive (msg) {
+    this.wsActor.tell(new Track(msg))
+  }
+}
+
 class TwitterUiActor extends DomActor {
   constructor (address) {
     super("root")
@@ -75,22 +91,6 @@ class TwitterUiActor extends DomActor {
   }
   receive (msg) {
     this.update(msg)
-  }
-}
-
-class TrackButton extends DomActor {
-  constructor (id, wsActor) {
-    super("button" + id)
-    this.wsActor = wsActor
-  }
-  render () {
-    return <button>Track</button>
-  }
-  events () {
-    return { "click": domHandlers.getInputValue }
-  }
-  receive (msg) {
-    this.wsActor.tell(new Track(msg))
   }
 }
 

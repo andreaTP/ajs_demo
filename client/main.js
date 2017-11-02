@@ -1,6 +1,7 @@
 /** @jsx h */
 const { UiManager } = require("akkajs-dom/page")
 const domHandlers = require("./dom-handlers.js")
+
 /*
 new UiManager(
   // require("./simple.js"),
@@ -53,16 +54,9 @@ new UiManager(
   new Worker("./js/prime.out.js"),
   domHandlers
 )
+*/
 
-const primesN = 10
-for (let i = 0; i < primesN; i++) {
-  const name = "shared" + i
-  new UiManager(
-    new SharedWorker("./js/prime.out.js", name),
-    domHandlers
-  )
-}
-
+/*
 const ping = new SharedWorker("./js/pingpong.out.js", "ping")
 const pong = new SharedWorker("./js/pingpong.out.js", "pong")
 
@@ -82,10 +76,11 @@ new UiManager(
   }
 )
 */
+
 new UiManager(
   // require("./twitter.js"),
-  // new Worker("./js/twitter.out.js"),
-  new SharedWorker("./js/twitter.out.js"),
+  new Worker("./js/twitter.out.js"),
+  // new SharedWorker("./js/twitter.out.js"),
   domHandlers
 )
 
@@ -93,3 +88,19 @@ new UiManager(
   new Worker("./js/twitter.out.js"),
   domHandlers
 )
+/*
+const primesN = 10
+for (let i = 0; i < primesN; i++) {
+  const name = "shared" + i
+  new UiManager(
+    new SharedWorker("./js/prime.out.js", name),
+    domHandlers
+  )
+}
+
+new UiManager(
+  // require("./prime.js"),
+  require("./simple.js"),
+  domHandlers
+)
+*/
