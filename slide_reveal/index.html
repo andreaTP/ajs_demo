@@ -85,7 +85,7 @@
               - Location transparency<!-- .element: class="fragment" data-fragment-index="2" -->
               - Distribution<!-- .element: class="fragment" data-fragment-index="2" -->
               - High availability<!-- .element: class="fragment" data-fragment-index="2" -->
-              - Failure tolerance<!-- .element: class="fragment" data-fragment-index="2" -->
+              - Fault tolerance<!-- .element: class="fragment" data-fragment-index="2" -->
               - ...<!-- .element: class="fragment" data-fragment-index="2" -->
             </script>
           </section>
@@ -115,18 +115,6 @@
           <section><img data-src="./images/one.png" /></section>
           <section><img data-src="./images/two.png" /></section>
           <section><img data-src="./images/three.png" /></section>
-        </section>
-
-        <section data-markdown>
-          <script type="text/template">
-          ##How does it work?
-            - compiler plugins<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
-            - java std lib<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
-            - reflection<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
-            - IR patches<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
-            - ...<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
-          #Who cares?<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
-          </script>
         </section>
 
         <section data-markdown>
@@ -172,7 +160,7 @@
           <script type="text/template">
           ##Lessons learned
             - Concepts separation<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
-            - Callback hell<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+            - No Callback hell<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
             - Free concurrency isolation<!-- .element: style="color: white;" class="fragment" data-fragment-index="3" -->
 
           in ~80 LOC :-)<!-- .element: style="color: white;" class="fragment" data-fragment-index="4" -->
@@ -187,7 +175,8 @@
             #TBD think better what to say
             ... nothing serious ...<!-- .element: class="fragment" data-fragment-index="1" -->
             <br>
-            <a href="https://www.npmjs.com/package/akkajs-dom">Akka.Js DOM</a><!-- .element: class="fragment" data-fragment-index="2" -->
+            <a href="https://www.npmjs.com/package/akkajs">Akka.Js</a><!-- .element: class="fragment" data-fragment-index="2" -->
+            <br>
             </script>
           </section>
           <section data-markdown>
@@ -195,17 +184,20 @@
             ##Frontend Architecture
               - Protocol<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
               - WSActor<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+
+another slide
+a slide with contepts and benefits of Akka.Js DOM
+<a href="https://www.npmjs.com/package/akkajs-dom">Akka.Js DOM</a><!-- .element: class="fragment" data-fragment-index="3" -->
+- Local Mutable State (with VDOM)
+- Page / application separation
+- Location transparency for application
+- Real parallelism (multithread via Workers)
+- Fully asynchronous
+
+and then UI part
+
               - TrackButton<!-- .element: style="color: white;" class="fragment" data-fragment-index="3" -->
               - TwitterUiActor<!-- .element: style="color: white;" class="fragment" data-fragment-index="4" -->
-            </script>
-          </section>
-          <section data-markdown>
-            <script type="text/template">
-            ##Frontend Architecture
-
-            ~> TrackButton ~> WSActor ~> WebSocket<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
-
-            ~> WebSocket ~> WSActor ~> TwitterUiActor<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
             </script>
           </section>
         </section>
@@ -268,7 +260,7 @@
               ##What next?
               - Akka.Js DOM<!-- .element: class="fragment" data-fragment-index="1" -->
               - Remote<!-- .element: class="fragment" data-fragment-index="2" -->
-              - Typed<!-- .element: class="fragment" data-fragment-index="3" -->
+              - Persistance<!-- .element: class="fragment" data-fragment-index="3" -->
               - ...<!-- .element: class="fragment" data-fragment-index="4" -->
             </script>
         </section>

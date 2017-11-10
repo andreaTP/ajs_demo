@@ -81,7 +81,7 @@ class TwitterUiActor extends DomActor {
     return <div className='box'>{[
       <input id={"elem" + this.id} />,
       <div id={"button" + this.id} />,
-      <h3 id={("from" + this.id).toUpperCase()}>{from}</h3>,
+      <h3 id={"from" + this.id}>{from}</h3>,
       <p id={"msg" + this.id}>{msg}</p>
     ]}</div>
   }

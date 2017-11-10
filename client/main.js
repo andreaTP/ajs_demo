@@ -88,7 +88,7 @@ new UiManager(
   new Worker("./js/twitter.out.js"),
   domHandlers
 )
-/*
+
 const primesN = 10
 for (let i = 0; i < primesN; i++) {
   const name = "shared" + i
@@ -99,8 +99,7 @@ for (let i = 0; i < primesN; i++) {
 }
 
 new UiManager(
-  // require("./prime.js"),
-  require("./simple.js"),
+  require("./prime.js"),
+  // require("./simple.js"),
   domHandlers
 )
-*/
