@@ -3,6 +3,14 @@ const getInputValue = function (event) {
   return event.srcElement.parentNode.parentNode.childNodes[0].value
 }
 
+const getTrackValue = function (event) {
+  console.log("ciao")
+  event.preventDefault()
+  if (event.keyCode === 13) {
+    return event.srcElement.value
+  }
+}
+
 const getKeyUp = function (event) {
   return event.key
 }
@@ -21,6 +29,7 @@ const click = function () {
 
 module.exports = {
   getInputValue,
+  getTrackValue,
   getKeyUp,
   killMe,
   click

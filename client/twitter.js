@@ -4,7 +4,6 @@ const { ActorSystem, Actor } = require("akkajs")
 const { DomActor, localPort } = require("akkajs-dom/work")
 
 const domHandlers = require("./dom-handlers.js")
-const { uuid } = require("./utils.js")
 
 const system = ActorSystem.create()
 
@@ -48,26 +47,27 @@ class WSActor extends Actor {
   }
 }
 
-class TrackButton extends DomActor {
-  constructor (id, wsActor) {
-    super("button" + id)
+class TrackInput extends DomActor {
+  constructor (wsActor) {
+    super()
     this.wsActor = wsActor
   }
   render () {
-    return <button>Track</button>
+    return <input placeholder={"track"} />
   }
   events () {
-    return { "click": domHandlers.getInputValue }
+    return { "keyup": domHandlers.getTrackValue }
   }
   receive (msg) {
-    this.wsActor.tell(new Track(msg))
+    if (msg !== undefined) {
+      this.wsActor.tell(new Track(msg))
+    }
   }
 }
 
 class TwitterUiActor extends DomActor {
   constructor (address) {
     super("root")
-    this.id = uuid()
     this.address = address
   }
   render (value) {
@@ -79,15 +79,13 @@ class TwitterUiActor extends DomActor {
     }
 
     return <div className='box'>{[
-      <input id={"elem" + this.id} />,
-      <div id={"button" + this.id} />,
-      <h3 id={"from" + this.id}>{from}</h3>,
-      <p id={"msg" + this.id}>{msg}</p>
+      <h3 id={"from"}>{from}</h3>,
+      <p id={"msg"}>{msg}</p>
     ]}</div>
   }
   postMount () {
     this.wsActor = this.spawn(new WSActor(this.address))
-    this.spawn(new TrackButton(this.id, this.wsActor))
+    this.spawn(new TrackInput(this.wsActor))
   }
   receive (msg) {
     this.update(msg)
