@@ -4,7 +4,6 @@ const getInputValue = function (event) {
 }
 
 const getTrackValue = function (event) {
-  console.log("ciao")
   event.preventDefault()
   if (event.keyCode === 13) {
     return event.srcElement.value
