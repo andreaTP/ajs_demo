@@ -88,6 +88,7 @@ new UiManager(
   new Worker("./js/twitter.out.js"),
   domHandlers
 )
+
 /*
 const primesN = 10
 for (let i = 0; i < primesN; i++) {
