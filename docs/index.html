@@ -1,0 +1,320 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Akka.js</title>
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <script src="plugin/highlight/highlight.js"></script>
+    <!-- Mermaid Diagrams -->
+    <!--<link rel="stylesheet" href="css/mermaid.dark.css">
+    <script src="lib/js/mermaid.min.js"></script>-->
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+    <div class="reveal">
+      <div class="slides">
+
+        <section data-markdown>
+          <script type="text/template">
+            <img data-src="./images/akkajs_nobg.png" />
+            ___and___
+            ### why the actor model matters even in JS's world.
+          </script>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          ### Who am I?
+          ![alt text](./images/io.png "")<!-- .element: style="max-height: 300px; margin: 0px 0px 0px 0px;"-->
+
+          ![alt text](./images/nokia2.png "")<!-- .element: style="max-height: 100px; margin: 0px 0px 0px 0px;"-->
+          - GitHub [andreaTP]()
+          - Twitter [@and_prf]()
+          </script>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          ### Theory
+
+          An actor is an execution unit that runs concurrently with other actors
+
+            - Can communicate through message passing<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
+            - Can change its behaviour<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+            - Can spawn other actors<!-- .element: style="color: white;" class="fragment" data-fragment-index="3" -->
+
+          <a>Hewitt, Bishop and Steiger, 1973</a>
+          </script>
+        </section>
+
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+            ### Today
+
+            <img style="max-height: 100px;max-width: 200px;" data-src="./images/orleans.svg" />
+            <img style="max-height: 70px;max-width: 100px;" data-src="./images/erlang.png" />
+            <img style="max-height: 70px;max-width: 100px;" data-src="./images/pony.png" />
+            <img style="max-height: 70px;max-width: 100px;" data-src="./images/elixir.png" />
+            <img style="max-height: 100px;max-width: 120px;" data-src="./images/akka.svg" />
+            <img style="max-height: 70px;max-width: 100px;" data-src="./images/akkadotnet.png" />
+            <img style="max-height: 70px;max-width: 100px;" data-src="./images/protoactor.png" />
+
+            ### Why?<!-- .element: class="fragment" data-fragment-index="1" -->
+
+              - Concurrency<!-- .element: class="fragment" data-fragment-index="2" -->
+              - Parallelism<!-- .element: class="fragment" data-fragment-index="3" -->
+              - Location transparency<!-- .element: class="fragment" data-fragment-index="4" -->
+              - Distribution<!-- .element: class="fragment" data-fragment-index="4" -->
+              - High availability<!-- .element: class="fragment" data-fragment-index="4" -->
+              - Fault tolerance<!-- .element: class="fragment" data-fragment-index="4" -->
+              - ...<!-- .element: class="fragment" data-fragment-index="4" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+            ### Yes, but ... why???
+
+            <br>
+            <br>
+
+            simplicity<!-- .element: class="fragment" data-fragment-index="1" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+            ### We do not have such problems in JS ...
+
+            <br>
+            <br>
+
+            are you sure?<!-- .element: class="fragment" data-fragment-index="1" -->
+            </script>
+          </section>
+        </section>
+
+        <section>
+          <section><img data-src="./images/one.png" /></section>
+          <section><img data-src="./images/two.png" /></section>
+          <section><img data-src="./images/three.png" /></section>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          ##Why should I care?
+          ##keep ride actors on JS!!!<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
+          </script>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          ##Exercise:
+          A fullstack POC for Twitter streaming service.<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
+          </script>
+        </section>
+
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+            ##Backend
+            <a href="https://www.npmjs.com/package/akkajs">Akka.Js</a><!-- .element: class="fragment" data-fragment-index="2" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+            ##Backend Architecture
+              - WebSocketServer -> Actor<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
+              - WebSocketChannel -> Actor<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+              - TwitterService -> Actor<!-- .element: style="color: white;" class="fragment" data-fragment-index="3" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+            ##Backend Architecture
+              - WebSocketServer -> Actor -> <!-- .element: style="color: white;" class="fragment" data-fragment-index="1" --><a href="https://www.npmjs.com/package/websocket">Node Websocket</a>
+              - WebSocketChannel -> Actor<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+              - TwitterService -> Actor -> <!-- .element: style="color: white;" class="fragment" data-fragment-index="3" --><a href="https://www.npmjs.com/package/node-tweet-stream">Node Tweet Stream</a>
+            </script>
+          </section>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          ##Lessons learned
+            - Concepts separation<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
+            - No Callback hell<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+            - Free concurrency isolation<!-- .element: style="color: white;" class="fragment" data-fragment-index="3" -->
+
+          in ~80 LOC :-)<!-- .element: style="color: white;" class="fragment" data-fragment-index="4" -->
+          </script>
+        </section>
+
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+            ##Frontend
+            <a href="https://www.npmjs.com/package/akkajs">Akka.Js</a>
+            <br>
+            - Protocol<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
+            - WSActor<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+            ##Frontend
+            <a href="https://www.npmjs.com/package/akkajs">Akka.Js</a>
+            <br>
+            - Protocol
+            - WSActor
+            <br><br>
+            <a href="https://www.npmjs.com/package/akkajs-dom">Akka.Js DOM</a>
+            <br>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+            ##Akka.Js DOM
+            <a href="https://www.npmjs.com/package/akkajs-dom">Akka.Js DOM</a>
+            <br>
+            - Local Mutable State (with VDOM)
+            - Page / application separation
+            - Location transparency for application
+            - Real parallelism
+            - Fully asynchronous
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+            ##Frontend
+            <a href="https://www.npmjs.com/package/akkajs">Akka.Js</a>
+            <br>
+            - Protocol
+            - WSActor
+            <br><br>
+            <a href="https://www.npmjs.com/package/akkajs-dom">Akka.Js DOM</a>
+            <br>
+            - TrackInput<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
+            - TwitterUiActor<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+            </script>
+          </section>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          ##Lessons learned
+            - Same programming model<!-- .element: style="color: white;" class="fragment" data-fragment-index="1" -->
+            - Reusability<!-- .element: style="color: white;" class="fragment" data-fragment-index="2" -->
+            - MultiThread!<!-- .element: style="color: white;" class="fragment" data-fragment-index="3" -->
+
+          in ~100 LOC :-)<!-- .element: style="color: white;" class="fragment" data-fragment-index="4" -->
+          </script>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          ###Yes, multi-thread I said
+          </script>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+            ##Thank you!
+            and remember, you can help! :-)<!-- .element: class="fragment" data-fragment-index="1" -->
+
+            [https://github.com/akka-js](Akka.js)<!-- .element: class="fragment" data-fragment-index="2" -->
+          </script>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+            ####Just in case
+          </script>
+        </section>
+
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ##A few words about Akka.JS
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ##It's Akka!
+              ####LOC statistics<!-- .element: style="color: white;" -->
+              - Akka shared ~ 24695<!-- .element: class="fragment" data-fragment-index="2" -->
+              - Akka JS ~ 4371<!-- .element: class="fragment" data-fragment-index="3" -->
+              - Akka JS Bindings ~ 150 only :-(<!-- .element: class="fragment" data-fragment-index="6" -->
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ##What is going on?
+
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ###Performance
+
+              [Benchmarks](https://github.com/andreaTP/scalajs-benchmarks)
+              e.g.:
+
+|PingPong|1.2.5.0|1.2.5.1|1.2.5.2|1.2.5.4/6|JVM|
+|:-------:|:-----:|:-----:|:-----:|:-:|
+||2476333|2317666|3923|___2507___|1192|
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+            <script type="text/template">
+              ##What next?
+              - Akka.Js DOM<!-- .element: class="fragment" data-fragment-index="1" -->
+              - Remote<!-- .element: class="fragment" data-fragment-index="2" -->
+              - Persistance<!-- .element: class="fragment" data-fragment-index="3" -->
+              - ...<!-- .element: class="fragment" data-fragment-index="4" -->
+            </script>
+        </section>
+
+      </div>
+    </div>
+     <script src="lib/js/head.min.js"></script>
+     <script src="js/reveal.js"></script>
+     <script>
+       hljs.initHighlightingOnLoad();
+       //mermaid.initialize({startOnLoad:true});
+       // More info https://github.com/hakimel/reveal.js#configuration
+       Reveal.initialize({
+         history: true,
+
+         // More info https://github.com/hakimel/reveal.js#dependencies
+         dependencies: [
+           { src: 'plugin/markdown/marked.js' },
+           { src: 'plugin/markdown/markdown.js' },
+           { src: 'plugin/notes/notes.js', async: true },
+           { src: './plugin/externalcode/externalcode.js', condition: function() { return !!document.querySelector( '[data-code]' ); } }
+         ]
+       });
+       //Reveal.configure({ slideNumber: 'c/t' });
+     </script>
+	</body>
+</html>
